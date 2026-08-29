@@ -1,0 +1,31 @@
+import discord
+from discord.ext import commands
+
+intents = discord.Intents.default()
+intents.message_content = True
+
+bot = commands.Bot(command_prefix='$', intents=intents)
+
+@bot.event
+async def on_ready():
+    print(f'We have logged in as {bot.user}')
+    # Pone un estado personalizado al conectarse
+    await bot.change_presence(
+        activity=discord.Activity(type=discord.ActivityType.watching, name="tus comandos $")
+    )
+
+@bot.command()
+async def hello(ctx):
+    await ctx.send(f'Hola, soy un bot {bot.user}!')
+
+@bot.command()
+async def heh(ctx, count_heh = 5):
+    await ctx.send("he" * count_heh)
+
+@bot.command()
+async def status(ctx, *, texto):
+    # Comando para cambiar el estado del bot al vuelo
+    await bot.change_presence(activity=discord.Game(name=texto))
+    await ctx.send(f'Estado cambiado a: {texto}')
+
+bot.run("Tu clave") 
